@@ -1,3 +1,12 @@
+{{
+  "name": "appointy-root",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd backend && npm install",
+    "build": "cd backend && echo 'No build step required'",
+    "start": "cd backend && npm start"
+  }}
+
 {
   "name": "backend",
   "version": "1.0.0",
