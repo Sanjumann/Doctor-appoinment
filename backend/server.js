@@ -1,4 +1,7 @@
 import express from 'express'
+import dns from 'dns'
+dns.setServers(['8.8.8.8', '8.8.4.4'])
+import mongoose from 'mongoose'
 import cors from 'cors'
 import 'dotenv/config'
 import connectDB from './config/mongodb.js'
@@ -41,3 +44,5 @@ app.get('/test-db', (req, res) => {
 
 
 app.listen(port, () => console.log(`Server started on PORT:${port}`))
+
+export default app;

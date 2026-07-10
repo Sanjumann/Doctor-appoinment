@@ -6,7 +6,7 @@ export const AppContext = createContext()
 
 const AppContextProvider = (props) => {
     const currencySymbol = '₹'
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
 
     const [doctors, setDoctors] = useState([])
     const [token, setToken] = useState(localStorage.getItem('token') || '')
@@ -42,10 +42,16 @@ const AppContextProvider = (props) => {
                 setUserData(safeUserData)
             } else {
                 toast.error(data.message)
+                if (data.message === 'User not found' || data.message === 'Not Authorized Login Again') {
+                    setToken(false)
+                    localStorage.removeItem('token')
+                }
             }
         } catch (error) {
             console.log(error)
-            toast.error(error.message)
+            toast.error("Profile load failed. Please login again.")
+            setToken(false)
+            localStorage.removeItem('token')
         }
     }
 

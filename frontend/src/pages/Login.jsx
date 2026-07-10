@@ -19,6 +19,7 @@ const Login = () => {
     try{
     if (state === 'Sign Up') {
 
+      console.log("Registration backendUrl is:", backendUrl);
       const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
 
       if (data.success) {

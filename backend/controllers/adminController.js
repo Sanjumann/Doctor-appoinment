@@ -47,8 +47,11 @@ const addDoctor = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
-    const imageUrl = imageUpload.secure_url;
+    let imageUrl = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400";
+    if (process.env.CLOUDINARY_API_KEY && !process.env.CLOUDINARY_API_KEY.includes("mock") && !process.env.CLOUDINARY_API_KEY.includes("placeholder")) {
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
+      imageUrl = imageUpload.secure_url;
+    }
 
     const doctorData = {
       name,

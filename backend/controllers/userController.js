@@ -84,6 +84,9 @@ const getProfile = async (req, res) => {
     try {
         const { userId } = req.body
         const userData = await userModel.findById(userId).select('-password')
+        if (!userData) {
+            return res.json({ success: false, message: 'User not found' })
+        }
 
         res.json({ success: true, userData })
 
@@ -110,8 +113,11 @@ const updateProfile = async (req, res) => {
         if (imageFile) {
 
             // upload image to cloudinary
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-            const imageURL = imageUpload.secure_url
+            let imageURL = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=400";
+            if (process.env.CLOUDINARY_API_KEY && !process.env.CLOUDINARY_API_KEY.includes("mock") && !process.env.CLOUDINARY_API_KEY.includes("placeholder")) {
+                const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
+                imageURL = imageUpload.secure_url
+            }
 
             await userModel.findByIdAndUpdate(userId, { image: imageURL })
         }
@@ -152,6 +158,9 @@ const bookAppointment = async (req, res) => {
         }
 
         const userData = await userModel.findById(userId).select("-password")
+        if (!userData) {
+            return res.json({ success: false, message: 'User not found' })
+        }
 
         delete docData.slots_booked
 
